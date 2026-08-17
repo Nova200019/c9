@@ -25,6 +25,7 @@ COPY public ./public
 COPY src ./src
 COPY backend ./backend
 COPY serverUtils ./serverUtils
+COPY .env ./backend/config/.env.production
 RUN npm run build
 
 # Remove dev dependencies
