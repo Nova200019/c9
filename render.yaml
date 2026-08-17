@@ -16,14 +16,14 @@ services:
         fromService:
           type: pserv
           name: mongo
-          property: host
+          envVarKey: RENDER_INTERNAL_HOSTNAME
       - key: MONGODB_URL
         value: mongodb://abcd:1234@${MONGO_HOST}:27017/mydrive?authSource=admin
       - key: REDIS_HOST
         fromService:
           type: pserv
           name: redis
-          property: host
+          envVarKey: RENDER_INTERNAL_HOSTNAME
       - key: REDIS_URL
         value: redis://${REDIS_HOST}:6379
       - key: DB_TYPE
@@ -34,7 +34,7 @@ services:
         fromService:
           type: pserv
           name: ollama
-          property: host
+          envVarKey: RENDER_INTERNAL_HOSTNAME
       - key: OLLAMA_URL
         value: http://${OLLAMA_HOST}:11434
       - key: OLLAMA_TEXT_MODEL
@@ -75,7 +75,7 @@ services:
         fromService:
           type: pserv
           name: minio
-          property: host
+          envVarKey: RENDER_INTERNAL_HOSTNAME
       - key: S3_ENDPOINT
         value: http://${MINIO_HOST}:9000
       - key: KEY
