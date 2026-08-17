@@ -161,7 +161,7 @@ services:
 
   - type: pserv
     name: mongo
-    env: docker
+    env: image
     image:
       url: mongo:8
     disk:
@@ -178,7 +178,7 @@ services:
 
   - type: pserv
     name: minio
-    env: docker
+    env: image
     image:
       url: minio/minio:latest
     dockerCommand: server /data --console-address ":9001"
@@ -194,7 +194,7 @@ services:
 
   - type: pserv
     name: ollama
-    env: docker
+    env: image
     image:
       url: ollama/ollama:latest
     dockerCommand: >
@@ -206,7 +206,7 @@ services:
 
   - type: pserv
     name: redis
-    env: docker
+    env: image
     image:
       url: redis:7
     disk:
