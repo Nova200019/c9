@@ -12,16 +12,31 @@ services:
         value: "8080"
       - key: DOCKER
         value: "true"
+      - key: MONGO_HOST
+        fromService:
+          type: pserv
+          name: mongo
+          property: host
       - key: MONGODB_URL
-        sync: false
+        value: mongodb://abcd:1234@${MONGO_HOST}:27017/mydrive?authSource=admin
+      - key: REDIS_HOST
+        fromService:
+          type: pserv
+          name: redis
+          property: host
       - key: REDIS_URL
-        value: redis://redis:6379
+        value: redis://${REDIS_HOST}:6379
       - key: DB_TYPE
         value: s3
       - key: AI_PROVIDER
         value: ollama
+      - key: OLLAMA_HOST
+        fromService:
+          type: pserv
+          name: ollama
+          property: host
       - key: OLLAMA_URL
-        value: http://ollama:11434
+        value: http://${OLLAMA_HOST}:11434
       - key: OLLAMA_TEXT_MODEL
         value: llama2:13b
       - key: OLLAMA_VISION_MODEL
@@ -56,8 +71,13 @@ services:
         sync: false
       - key: S3_BUCKET
         value: mydrive
+      - key: MINIO_HOST
+        fromService:
+          type: pserv
+          name: minio
+          property: host
       - key: S3_ENDPOINT
-        value: http://minio:9000
+        value: http://${MINIO_HOST}:9000
       - key: KEY
         sync: false
       - key: PASSWORD_ACCESS
