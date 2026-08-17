@@ -15,7 +15,7 @@ services:
       - key: MONGODB_URL
         sync: false
       - key: REDIS_URL
-        sync: false
+        value: redis://redis:6379
       - key: DB_TYPE
         value: s3
       - key: AI_PROVIDER
@@ -23,15 +23,15 @@ services:
       - key: OLLAMA_URL
         value: http://ollama:11434
       - key: OLLAMA_TEXT_MODEL
-        value: qwen2.5:7b-instruct
+        value: llama2:13b
       - key: OLLAMA_VISION_MODEL
-        value: llava:7b
+        value: llava:13b
       - key: OLLAMA_EMBEDDING_MODEL
         value: nomic-embed-text
       - key: OLLAMA_REASONING_MODEL
-        value: qwen2.5:7b-instruct
+        value: llama2:13b
       - key: OLLAMA_PULL_MODELS
-        value: qwen2.5:7b-instruct llava:7b nomic-embed-text
+        value: llama2:13b llava:13b nomic-embed-text
       - key: LOCAL_WHISPER_MODEL
         value: Xenova/whisper-medium.en
       - key: LOCAL_EMBED_MODEL
@@ -138,3 +138,55 @@ services:
         sync: false
       - key: USE_CDN_FOR_PUBLIC_FILES
         value: "true"
+
+  - type: pserv
+    name: mongo
+    env: docker
+    image: mongo:8
+    disk:
+      name: mongo-data
+      mountPath: /data/db
+      sizeGB: 10
+    envVars:
+      - key: MONGO_INITDB_ROOT_USERNAME
+        value: abcd
+      - key: MONGO_INITDB_ROOT_PASSWORD
+        value: "1234"
+      - key: MONGO_INITDB_DATABASE
+        value: mydrive
+
+  - type: pserv
+    name: minio
+    env: docker
+    image: minio/minio:latest
+    dockerCommand: server /data --console-address ":9001"
+    disk:
+      name: minio-data
+      mountPath: /data
+      sizeGB: 10
+    envVars:
+      - key: MINIO_ROOT_USER
+        value: minioadmin
+      - key: MINIO_ROOT_PASSWORD
+        value: minioadmin123
+
+  - type: pserv
+    name: ollama
+    env: docker
+    image: ollama/ollama:latest
+    dockerCommand: >
+      /bin/sh -c "ollama serve & sleep 5 && ollama pull llama2:13b && ollama pull llava:13b && ollama pull nomic-embed-text && wait"
+    disk:
+      name: ollama-data
+      mountPath: /root/.ollama
+      sizeGB: 50
+
+  - type: pserv
+    name: redis
+    env: docker
+    image: redis:7
+    disk:
+      name: redis-data
+      mountPath: /data
+      sizeGB: 1
+    dockerCommand: redis-server --appendonly yes
