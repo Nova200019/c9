@@ -12,12 +12,12 @@ out/
 .nuxt/
 
 # Environment files
-.env
+
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-*.env
+
 
 # Certificates and keys
 *.key
