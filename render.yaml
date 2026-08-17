@@ -15,24 +15,13 @@ services:
       - key: MONGODB_URL
         sync: false
       - key: REDIS_URL
-        fromService:
-          type: keyvalue
-          name: cloud9-redis
-          property: connectionString
+        sync: false
       - key: DB_TYPE
         value: s3
       - key: AI_PROVIDER
         value: ollama
-      - key: OLLAMA_HOST
-        fromService:
-          type: pserv
-          name: ollama
-          property: host
-      - key: OLLAMA_PORT
-        fromService:
-          type: pserv
-          name: ollama
-          property: port
+      - key: OLLAMA_URL
+        sync: false
       - key: OLLAMA_TEXT_MODEL
         value: llama2:13b
       - key: OLLAMA_VISION_MODEL
@@ -67,16 +56,8 @@ services:
         sync: false
       - key: S3_BUCKET
         value: mydrive
-      - key: MINIO_HOST
-        fromService:
-          type: pserv
-          name: minio
-          property: host
-      - key: MINIO_PORT
-        fromService:
-          type: pserv
-          name: minio
-          property: port
+      - key: S3_ENDPOINT
+        sync: false
       - key: KEY
         sync: false
       - key: PASSWORD_ACCESS
@@ -157,56 +138,3 @@ services:
         sync: false
       - key: USE_CDN_FOR_PUBLIC_FILES
         value: "true"
-
-  - type: pserv
-    name: mongo
-    runtime: image
-    image:
-      url: mongo:8
-    disk:
-      name: mongo-data
-      mountPath: /data/db
-      sizeGB: 10
-    envVars:
-      - key: MONGO_INITDB_ROOT_USERNAME
-        value: abcd
-      - key: MONGO_INITDB_ROOT_PASSWORD
-        value: "1234"
-      - key: MONGO_INITDB_DATABASE
-        value: mydrive
-
-  - type: pserv
-    name: minio
-    runtime: image
-    image:
-      url: minio/minio:latest
-    dockerCommand: server /data --console-address ":9001"
-    disk:
-      name: minio-data
-      mountPath: /data
-      sizeGB: 10
-    envVars:
-      - key: MINIO_ROOT_USER
-        value: minioadmin
-      - key: MINIO_ROOT_PASSWORD
-        value: minioadmin123
-
-  - type: pserv
-    name: ollama
-    runtime: image
-    image:
-      url: ollama/ollama:latest
-    dockerCommand: >
-      /bin/sh -c "ollama serve & sleep 5 && ollama pull llama2:13b && ollama pull llava:13b && ollama pull nomic-embed-text && wait"
-    disk:
-      name: ollama-data
-      mountPath: /root/.ollama
-      sizeGB: 50
-
-  - type: keyvalue
-    name: cloud9-redis
-    ipAllowList:
-      - source: 0.0.0.0/0
-        description: everywhere
-    plan: free
-    maxmemoryPolicy: allkeys-lru
