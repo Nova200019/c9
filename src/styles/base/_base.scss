@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  -webkit-appearance: none;
+}
+
+body {
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+body,
+html {
+  margin: 0px;
+  padding: 0px;
+  & input[type="text"],
+  & input[type="submit"] {
+    outline: none;
+  }
+}
+body {
+  & * {
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+}
+
+.dynamic-height {
+  height: 100dvh;
+}

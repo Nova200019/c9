@@ -1,0 +1,41 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build outputs
+dist-backend/
+dist-frontend/
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Certificates and keys
+*.key
+*.pem
+*.crt
+*.ca-bundle
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Build reports
+stats.html
+
+# Cache and logs
+.npm
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*

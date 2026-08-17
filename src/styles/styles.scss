@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./base/base";
+@import "./components/Spinner";
+@import "./components/Swal";
+
+.animate {
+  transition: 0.2s ease all;
+}
+
+.animate-easy {
+  transition: 0.3s ease all;
+}
+
+.animate-movement {
+  transition: 0.4s ease all;
+}
+
+.animate-medium {
+  transition: 0.6s ease all;
+}
+
+.animate-very-long {
+  transition: 6s ease all;
+}
+
+.Toastify__progress-bar--success {
+  background-color: #3c85ee !important;
+}
+
+.--toastify-color-transparent .Toastify__toast-icon {
+  background-color: #3c85ee !important;
+}
+
+.Toastify__toast--success .Toastify__icon svg path {
+  fill: #3c85ee !important;
+}
+
+:root {
+  --toastify-icon-color-success: #3c85ee !important;
+}
+
+.disable-force-touch {
+  -webkit-touch-callout: none;
+}
+
+@layer base {
+  body.dark-mode {
+    background-color: #050508;
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.1), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.1), transparent 25%);
+    color: #f0f2ff;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-ai-surface backdrop-blur-glass border border-ai-border shadow-lg rounded-2xl;
+  }
+  
+  .glass-button {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+  
+  .glass-button::before {
+    content: "";
+    @apply absolute inset-0 opacity-0 bg-gradient-to-r from-ai-cyan to-ai-violet transition-opacity duration-300;
+    z-index: -1;
+  }
+  
+  .glass-button:hover::before {
+    @apply opacity-20;
+  }
+  
+  .text-gradient {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-ai-cyan to-ai-violet animate-gradient-x;
+  }
+}
+
+/* View Transitions API Native Fallbacks / Customizations */
+::view-transition-old(chat-morph) {
+  animation: 0.3s cubic-bezier(0.4, 0, 0.2, 1) both fade-out;
+}
+::view-transition-new(chat-morph) {
+  animation: 0.5s cubic-bezier(0.4, 0, 0.2, 1) both slide-up, 0.4s fade-in;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

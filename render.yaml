@@ -1,0 +1,140 @@
+services:
+  - type: web
+    name: cloud9-ai-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/ping
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: DOCKER
+        value: "true"
+      - key: MONGODB_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: DB_TYPE
+        value: s3
+      - key: AI_PROVIDER
+        value: ollama
+      - key: OLLAMA_URL
+        value: http://ollama:11434
+      - key: OLLAMA_TEXT_MODEL
+        value: qwen2.5:7b-instruct
+      - key: OLLAMA_VISION_MODEL
+        value: llava:7b
+      - key: OLLAMA_EMBEDDING_MODEL
+        value: nomic-embed-text
+      - key: OLLAMA_REASONING_MODEL
+        value: qwen2.5:7b-instruct
+      - key: OLLAMA_PULL_MODELS
+        value: qwen2.5:7b-instruct llava:7b nomic-embed-text
+      - key: LOCAL_WHISPER_MODEL
+        value: Xenova/whisper-medium.en
+      - key: LOCAL_EMBED_MODEL
+        value: Xenova/all-MiniLM-L6-v2
+      - key: STABLE_DIFFUSION_URL
+        value: ""
+      - key: COMFYUI_URL
+        value: ""
+      - key: SMTP_HOST
+        value: ""
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: FS_DIRECTORY
+        value: /data/
+      - key: S3_ID
+        sync: false
+      - key: S3_KEY
+        sync: false
+      - key: S3_BUCKET
+        value: mydrive
+      - key: S3_ENDPOINT
+        value: http://minio:9000
+      - key: KEY
+        sync: false
+      - key: PASSWORD_ACCESS
+        sync: false
+      - key: PASSWORD_REFRESH
+        sync: false
+      - key: PASSWORD_COOKIE
+        sync: false
+      - key: VIDEO_THUMBNAILS_ENABLED
+        value: "true"
+      - key: TEMP_DIRECTORY
+        value: /temp/
+      - key: TEMP_VIDEO_THUMBNAIL_LIMIT
+        value: "5000000000"
+      - key: EMAIL_VERIFICATION
+        value: "false"
+      - key: EMAIL_DOMAIN
+        value: gmail.com
+      - key: EMAIL_ADDRESS
+        sync: false
+      - key: EMAIL_API_KEY
+        sync: false
+      - key: EMAIL_HOST
+        value: in-v3.mailjet.com
+      - key: REMOTE_URL
+        value: https://cloud9ca3.azurewebsites.net
+      - key: SECURE_COOKIES
+        value: "true"
+      - key: SSL
+        value: "false"
+      - key: HTTPS_KEY_PATH
+        value: certificate.key
+      - key: HTTPS_CA_PATH
+        value: certificate.ca-bundle
+      - key: HTTPS_CRT_PATH
+        value: certificate.crt
+      - key: TIER_FREE_MSG_LIMIT
+        value: "50"
+      - key: TIER_FREE_TOOL_LIMIT
+        value: "10"
+      - key: TIER_FREE_TOKEN_LIMIT
+        value: "100000"
+      - key: TIER_FREE_CODE_EXEC
+        value: "false"
+      - key: TIER_FREE_AGENTS
+        value: "false"
+      - key: TIER_PRO_MSG_LIMIT
+        value: "500"
+      - key: TIER_PRO_TOOL_LIMIT
+        value: "200"
+      - key: TIER_PRO_TOKEN_LIMIT
+        value: "2000000"
+      - key: TIER_PRO_CODE_EXEC
+        value: "true"
+      - key: TIER_PRO_AGENTS
+        value: "true"
+      - key: TIER_ENT_MSG_LIMIT
+        value: "999999"
+      - key: TIER_ENT_TOOL_LIMIT
+        value: "999999"
+      - key: TIER_ENT_TOKEN_LIMIT
+        value: "50000000"
+      - key: TIER_ENT_CODE_EXEC
+        value: "true"
+      - key: TIER_ENT_AGENTS
+        value: "true"
+      - key: TIER_ADMIN_MSG_LIMIT
+        value: "999999"
+      - key: TIER_ADMIN_TOOL_LIMIT
+        value: "999999"
+      - key: TIER_ADMIN_TOKEN_LIMIT
+        value: "999999999"
+      - key: TIER_ADMIN_CODE_EXEC
+        value: "true"
+      - key: TIER_ADMIN_AGENTS
+        value: "true"
+      - key: CLOUDFLARE_CDN_URL
+        sync: false
+      - key: USE_CDN_FOR_PUBLIC_FILES
+        value: "true"

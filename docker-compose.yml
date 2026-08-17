@@ -1,0 +1,85 @@
+services:
+  app:
+    container_name: mydrive
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mydrive:latest
+    volumes:
+      - mydrive-data:/data/
+      - mydrive-temp:/temp/
+    ports:
+      - "${HTTP_PORT:-3000}:3000"
+    environment:
+      S3_ID: minioadmin
+      S3_KEY: minioadmin123
+      S3_BUCKET: mydrive
+      S3_ENDPOINT: http://minio:9000
+    env_file:
+      - .env
+    networks:
+      - mydrive-network
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "11434:11434"
+    entrypoint: ["/bin/sh", "/usr/local/bin/ollama-start.sh"]
+    volumes:
+      - ollama-data:/root/.ollama
+      - ./scripts/ollama-start.sh:/usr/local/bin/ollama-start.sh:ro
+    networks:
+      - mydrive-network
+
+  mongo:
+    image: mongo:8
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: abcd
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+      MONGO_INITDB_DATABASE: mydrive
+    ports:
+      - 27017:27017
+    expose:
+      - 27017
+    volumes:
+      - db-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      timeout: 10s
+      interval: 10s
+      retries: 10
+      start_period: 10s
+    networks:
+      - mydrive-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - mydrive-network     
+
+volumes:
+  mydrive-data:
+  mydrive-temp:
+  db-data:
+  minio-data:
+  ollama-data:
+
+networks:
+  mydrive-network:
+    driver: bridge
