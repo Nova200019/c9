@@ -162,7 +162,8 @@ services:
   - type: pserv
     name: mongo
     env: docker
-    image: mongo:8
+    image:
+      url: mongo:8
     disk:
       name: mongo-data
       mountPath: /data/db
@@ -178,7 +179,8 @@ services:
   - type: pserv
     name: minio
     env: docker
-    image: minio/minio:latest
+    image:
+      url: minio/minio:latest
     dockerCommand: server /data --console-address ":9001"
     disk:
       name: minio-data
@@ -193,7 +195,8 @@ services:
   - type: pserv
     name: ollama
     env: docker
-    image: ollama/ollama:latest
+    image:
+      url: ollama/ollama:latest
     dockerCommand: >
       /bin/sh -c "ollama serve & sleep 5 && ollama pull llama2:13b && ollama pull llava:13b && ollama pull nomic-embed-text && wait"
     disk:
@@ -204,7 +207,8 @@ services:
   - type: pserv
     name: redis
     env: docker
-    image: redis:7
+    image:
+      url: redis:7
     disk:
       name: redis-data
       mountPath: /data
