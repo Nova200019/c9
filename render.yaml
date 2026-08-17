@@ -1,8 +1,8 @@
 services:
   - type: web
     name: cloud9-ai-backend
-    env: docker
-    plan: free
+    runtime: docker
+    plan: starter
     dockerfilePath: ./Dockerfile
     healthCheckPath: /api/ping
     envVars:
@@ -12,20 +12,13 @@ services:
         value: "8080"
       - key: DOCKER
         value: "true"
-      - key: MONGO_HOST
-        fromService:
-          type: pserv
-          name: mongo
-          envVarKey: RENDER_INTERNAL_HOSTNAME
       - key: MONGODB_URL
-        value: mongodb://abcd:1234@${MONGO_HOST}:27017/mydrive?authSource=admin
-      - key: REDIS_HOST
-        fromService:
-          type: pserv
-          name: redis
-          envVarKey: RENDER_INTERNAL_HOSTNAME
+        sync: false
       - key: REDIS_URL
-        value: redis://${REDIS_HOST}:6379
+        fromService:
+          type: keyvalue
+          name: cloud9-redis
+          property: connectionString
       - key: DB_TYPE
         value: s3
       - key: AI_PROVIDER
@@ -34,9 +27,12 @@ services:
         fromService:
           type: pserv
           name: ollama
-          envVarKey: RENDER_INTERNAL_HOSTNAME
-      - key: OLLAMA_URL
-        value: http://${OLLAMA_HOST}:11434
+          property: host
+      - key: OLLAMA_PORT
+        fromService:
+          type: pserv
+          name: ollama
+          property: port
       - key: OLLAMA_TEXT_MODEL
         value: llama2:13b
       - key: OLLAMA_VISION_MODEL
@@ -75,9 +71,12 @@ services:
         fromService:
           type: pserv
           name: minio
-          envVarKey: RENDER_INTERNAL_HOSTNAME
-      - key: S3_ENDPOINT
-        value: http://${MINIO_HOST}:9000
+          property: host
+      - key: MINIO_PORT
+        fromService:
+          type: pserv
+          name: minio
+          property: port
       - key: KEY
         sync: false
       - key: PASSWORD_ACCESS
@@ -161,7 +160,7 @@ services:
 
   - type: pserv
     name: mongo
-    env: image
+    runtime: image
     image:
       url: mongo:8
     disk:
@@ -178,7 +177,7 @@ services:
 
   - type: pserv
     name: minio
-    env: image
+    runtime: image
     image:
       url: minio/minio:latest
     dockerCommand: server /data --console-address ":9001"
@@ -194,7 +193,7 @@ services:
 
   - type: pserv
     name: ollama
-    env: image
+    runtime: image
     image:
       url: ollama/ollama:latest
     dockerCommand: >
@@ -204,13 +203,10 @@ services:
       mountPath: /root/.ollama
       sizeGB: 50
 
-  - type: pserv
-    name: redis
-    env: image
-    image:
-      url: redis:7
-    disk:
-      name: redis-data
-      mountPath: /data
-      sizeGB: 1
-    dockerCommand: redis-server --appendonly yes
+  - type: keyvalue
+    name: cloud9-redis
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: everywhere
+    plan: free
+    maxmemoryPolicy: allkeys-lru
